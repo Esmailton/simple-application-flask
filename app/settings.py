@@ -1,4 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 SECRET_KEY = 'thissecretkey'
-DEBUG = True
-SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/logon.db'
+SQLALCHEMY_DATABASE_URI = "postgresql://postgres:658343@localhost/logondb"
 SQLALCHEMY_TRACK_MODIFICATIONS = False

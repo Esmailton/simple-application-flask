@@ -218,9 +218,9 @@ $RECYCLE.BIN/
 *.msix
 *.msm
 *.msp
-
+app/settings.py
 # Windows shortcuts
 *.lnk
 .vscode/settings.json
-.vscode
+.vscode/
 # End of https://www.gitignore.io/api/flask,python,windows,visualstudiocode
