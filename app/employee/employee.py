@@ -11,11 +11,17 @@ class Employee(MethodView):
             abort(400)
 
     def get(self, employee_id):
-    
+
         try:
-            if employee_id:
+            if employee_id and employee_id.isdigit():
                 employee_schema = EmployeeSchema()
                 result = EmployeeModel.query.get(employee_id)
+                employee = employee_schema.dump(result)
+                return jsonify({'employee': employee.data}), 200
+
+            if employee_id and not employee_id.isdigit():
+                employee_schema = EmployeeSchema(many=True)
+                result = EmployeeModel.query.filter( EmployeeModel.name.ilike('%{}%'.format(employee_id)))
                 employee = employee_schema.dump(result)
                 return jsonify({'employee': employee.data}), 200
 
