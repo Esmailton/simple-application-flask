@@ -10,9 +10,11 @@ def create_app(config_file):
 
     from .employee.view import employee
     from .services.view import service
+    from .movement.view import movement
 
 
     app.register_blueprint(employee)
     app.register_blueprint(service)
+    app.register_blueprint(movement)
 
     return app

@@ -1,14 +1,14 @@
 from app import ma
-from .model import Movement, MovementEmployee, MovementOut, MovementValue
+from .model import MovementModel, MovementEmployee, MovementDescription, MovementValue
 from marshmallow import fields, validates, ValidationError
 
-class MovementSchema(ma.ModelSchema):
+class MovemenModeltSchema(ma.ModelSchema):
     class Meta: 
-        model = Movement
+        model = MovementModel
 
-class MovementOutSchema(ma.ModelSchema):
+class MovementDescriptionSchema(ma.ModelSchema):
     class Meta: 
-        model = MovementOut
+        model = MovementDescription
 
 class MovementEmployeeSchema(ma.ModelSchema):
     class Meta: 
