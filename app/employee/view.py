@@ -13,4 +13,3 @@ employee.add_url_rule(
     '/employee/', view_func=employee_view, methods=['POST', ])
 employee.add_url_rule('/employee/<employee_id>/', view_func=employee_view,
                        methods=['GET', 'PUT', 'DELETE', ])
-

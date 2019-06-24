@@ -13,11 +13,13 @@ class Employee(MethodView):
     def get(self, employee_id):
 
         try:
-            if employee_id and employee_id.isdigit():
+
+            if employee_id and employee_id.isdigit(): 
                 employee_schema = EmployeeSchema()
                 result = EmployeeModel.query.get(employee_id)
                 employee = employee_schema.dump(result)
                 return jsonify({'employee': employee.data}), 200
+
 
             if employee_id and not employee_id.isdigit():
                 employee_schema = EmployeeSchema(many=True)
@@ -26,6 +28,7 @@ class Employee(MethodView):
                 return jsonify({'employee': employee.data}), 200
 
             else:
+
                 employee_schema = EmployeeSchema(many=True)
                 result = EmployeeModel.query.all()
                 employees = employee_schema.dump(result)

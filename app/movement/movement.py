@@ -21,7 +21,7 @@ class Movement(MethodView):
                 .join(MovementDescription, MovementModel.id==MovementDescription.movement_id)\
                 .join(MovementEmployee, MovementEmployee.movement_id==MovementModel.id).all()
 
-            print(result)
+
 
             return jsonify({
                 'movement': 'Sucesso!'
@@ -66,7 +66,7 @@ class Movement(MethodView):
 
             movement_employee = {
                     'employee_id' : payload.get('employee_id'),
-                    'movement': movement.id
+                    'movement_id': movement.id
                     }
             movementemployee, error = Movementemployee_schema.load(movement_employee)
             if error:
@@ -80,9 +80,8 @@ class Movement(MethodView):
                 'expense_id' : payload.get('expense_id'),
                 'service_id': payload.get('service_id')
             }
-            movementdescription, error = Movementemployee_schema.load(movement_description)
+            movementdescription, error = Movementdescription_schema.load(movement_description)
 
-            print(movementdescription)
             if error:
                 return jsonify(error), 401
 

@@ -1,6 +1,6 @@
 from app import ma
 from .model import EmployeeModel
-from marshmallow import fields, validates, ValidationError
+from marshmallow import fields, ValidationError
 
 class EmployeeSchema(ma.ModelSchema):
     class Meta: 
