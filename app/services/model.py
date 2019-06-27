@@ -1,7 +1,6 @@
 from app import db
 from datetime import datetime
 
-
 class ServiceModel(db.Model):
 
     __tablename__ = 'service'
