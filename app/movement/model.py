@@ -2,15 +2,7 @@ from app import db
 from datetime import datetime
 from app.services.model import ServiceModel
 from ..employee.model import EmployeeModel
-
-
-class ExpenseModel(db.Model):
-
-    __tablename__ = 'expense'
-
-    id = db.Column(db.Integer, primary_key=True)
-    description = db.Column(db.String(255))
-    create_at = db.Column(db.DateTime, default=datetime.utcnow)
+from ..Expense.model import ExpenseModel
 
 
 class MovementModel(db.Model):
@@ -45,6 +37,7 @@ class MovementDescriptionModel(db.Model):
     service_id = db.Column(db.Integer, db.ForeignKey('service.id'))
     create_at = db.Column(db.DateTime, default=datetime.utcnow)
     service = db.relationship("ServiceModel")
+    expense = db.relationship("ExpenseModel")
 
 
 class MovementEmployeeModel(db.Model):
