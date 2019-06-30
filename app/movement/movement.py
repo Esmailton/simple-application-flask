@@ -30,12 +30,10 @@ class Movement(MethodView):
         if request.json:
 
             payload = request.json
-            print(payload)
             movement_schema = MovementSchema()
             movement_payload = {'type': payload.get('type')}
-            print(movement_payload)
             movement, error = movement_schema.load(movement_payload)
-            print(error, movement)
+
             if error:
                 return jsonify(error), 401
 
@@ -43,6 +41,7 @@ class Movement(MethodView):
             db.session.flush()
 
             if movement.id:
+
                 movement_value_schema = MovementValueSchema()
                 movement_value_payload = {
                     'movement_id': movement.id,
@@ -87,13 +86,13 @@ class Movement(MethodView):
                 db.session.commit()
 
                 return jsonify({
-                    'movement': 'Sucesso!'
+                    'movement': movement_payload
                 }), 201
 
         else:
             return jsonify({
-                'error': 'Error'
-            }), 400
+                'error': 'try again bad, request!'
+            }), 401
 
     def put(self):
         pass
