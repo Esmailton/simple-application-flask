@@ -11,11 +11,14 @@ class MovementSchema(ma.ModelSchema):
         model = MovementModel
 
     type = fields.Bool(required=True)
+    status = fields.Bool(required=True)
 
     movement_employee = fields.Nested(
         'MovementEmployeeSchema', only=['employee'], many=True)
+
     movement_value = fields.Nested(
         'MovementValueSchema', only=['value'], many=True)
+
     movement_description = fields.Nested(
         'MovementDescriptionSchema', only=['service', 'expense'], many=True)
 
@@ -29,8 +32,9 @@ class MovementDescriptionSchema(ma.ModelSchema):
     expense = fields.Nested(ExpenseSchema, only=['description'])
     movement = fields.Nested(MovementSchema)
 
-    expense_id = fields.Int(required=True)
-    service_id = fields.Int(required=True)
+    service_id = fields.Int(allow_none=True)
+    expense_id = fields.Int(allow_none=True)
+
     movement_id = fields.Int(required=True)
 
 

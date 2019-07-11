@@ -11,6 +11,7 @@ class MovementModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.Boolean)
+    status = db.Column(db.Boolean)
     create_at = db.Column(db.DateTime, default=datetime.utcnow)
     movement_value = db.relationship("MovementValueModel")
     movement_employee = db.relationship("MovementEmployeeModel")
@@ -33,8 +34,10 @@ class MovementDescriptionModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     movement_id = db.Column(db.Integer, db.ForeignKey('movement.id'))
-    expense_id = db.Column(db.Integer, db.ForeignKey('expense.id'))
-    service_id = db.Column(db.Integer, db.ForeignKey('service.id'))
+    expense_id = db.Column(
+        db.Integer, db.ForeignKey('expense.id'), nullable=True)
+    service_id = db.Column(
+        db.Integer, db.ForeignKey('service.id'), nullable=True)
     create_at = db.Column(db.DateTime, default=datetime.utcnow)
     service = db.relationship("ServiceModel")
     expense = db.relationship("ExpenseModel")
