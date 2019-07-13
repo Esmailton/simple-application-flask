@@ -16,8 +16,8 @@ class Role(db.Model):
     name = db.Column(db.String(64), unique=True)
     default = db.Column(db.Boolean, default=False, index=True)
     permissions = db.Column(db.Integer)
-    users = db.relationship('User',
-                            backref='role', lazy='dynamic')
+    users = db.relationship('UserModel',
+                            backref='Role', lazy='dynamic')
 
     def __init__(self, **kwargs):
         super(Role, self).__init__(**kwargs)
@@ -30,14 +30,9 @@ class Role(db.Model):
         roles = {
 
             'LOW': [Permission.LOW],
-
-            'MEDIUM': [Permission.LOW, Permission.MEDIUM,
-                       Permission.ALTA],
-
-            'HIGH': [Permission.LOW, Permission.LIGHT,
-                     Permission.MEDIUM],
-
-            'ADMIN': [Permission.LOW, Permission.LIGHT,
+            'MEDIUM': [Permission.LOW, Permission.MEDIUM],
+            'HIGH': [Permission.LOW, Permission.MEDIUM, Permission.HIGH],
+            'ADMIN': [Permission.LOW, Permission.MEDIUM,
                       Permission.MEDIUM, Permission.ADMIN]
         }
 

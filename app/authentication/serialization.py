@@ -1,5 +1,5 @@
 from app import ma
-from .model import UserModel, Role
+from .model import UserModel
 from marshmallow import fields
 
 
