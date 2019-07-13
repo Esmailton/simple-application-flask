@@ -3,7 +3,7 @@
 from flask import request, abort, request, jsonify
 from flask.views import MethodView
 from .model import MovementModel, MovementEmployeeModel, MovementDescriptionModel, MovementValueModel
-from ..Expense.model import ExpenseModel
+from ..expense.model import ExpenseModel
 from ..employee.model import EmployeeModel
 from ..services.model import ServiceModel
 from app import db

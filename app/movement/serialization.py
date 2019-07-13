@@ -3,7 +3,7 @@ from .model import MovementModel, MovementEmployeeModel, MovementDescriptionMode
 from marshmallow import fields
 from ..services.serialization import ServiceSchema
 from ..employee.serialization import EmployeeSchema
-from ..Expense.serialization import ExpenseSchema
+from ..expense.serialization import ExpenseSchema
 
 
 class MovementSchema(ma.ModelSchema):

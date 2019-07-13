@@ -2,7 +2,7 @@ from app import db
 from datetime import datetime
 from app.services.model import ServiceModel
 from ..employee.model import EmployeeModel
-from ..Expense.model import ExpenseModel
+from ..expense.model import ExpenseModel
 
 
 class MovementModel(db.Model):
