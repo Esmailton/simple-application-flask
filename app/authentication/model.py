@@ -67,7 +67,9 @@ class Role(db.Model):
 
 
 class UserModel(db.Model):
+    
     __tablename__ = 'users'
+
     id = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.String(25), index=True, unique=True)
     password_hash = db.Column(db.String(200))

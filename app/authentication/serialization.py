@@ -5,7 +5,7 @@ from marshmallow import fields
 
 class UserSchema(ma.ModelSchema):
     class Meta:
-        model: UserModel
+        model = UserModel
 
     user_name = fields.Str(required=True)
     password = fields.Str(required=True)

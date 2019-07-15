@@ -17,6 +17,7 @@ flask-migrate = "*"
 psycopg2 = "*"
 psycopg = "*"
 psycopg2-binary = "*"
+pyjwt = "==1.7.1"
 
 [requires]
 python_version = "3.7"

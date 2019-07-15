@@ -14,6 +14,7 @@ class Expense(MethodView):
             abort(400)
 
     def get(self, args):
+
         try:
 
             if args and args.isdigit():
