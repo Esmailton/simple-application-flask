@@ -5,6 +5,8 @@ from flask.views import MethodView
 from .model import ExpenseModel
 from app import db
 from .serialization import ExpenseSchema
+from ..authentication.utils.decorators import token_required
+from ..authentication.model import Permission
 
 
 class Expense(MethodView):
@@ -13,6 +15,7 @@ class Expense(MethodView):
         if (request.method != 'GET' and request.method != 'DELETE') and not request.json:
             abort(400)
 
+    @token_required(Permission.ADMIN)
     def get(self, args):
 
         try:
@@ -40,6 +43,7 @@ class Expense(MethodView):
         except:
             return jsonify({'error': 'Error while fetching data!'}), 404
 
+    @token_required(Permission.ADMIN)
     def post(self):
 
         if request.json:
@@ -70,6 +74,7 @@ class Expense(MethodView):
                 'error': 'try again bad, request!'
             }), 401
 
+    @token_required(Permission.ADMIN)
     def put(self, args):
 
         if request.json and args:
@@ -90,6 +95,7 @@ class Expense(MethodView):
                     'error': 'try again bad, request!'
                 }), 401
 
+    @token_required(Permission.ADMIN)
     def delete(self, args):
 
         if args:

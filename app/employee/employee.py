@@ -3,6 +3,9 @@ from flask.views import MethodView
 from .model import EmployeeModel
 from app import db
 from .serialization import EmployeeSchema
+from ..authentication.utils.decorators import token_required
+from ..authentication.model import Permission
+
 
 class Employee(MethodView):
 
@@ -10,20 +13,21 @@ class Employee(MethodView):
         if (request.method != 'GET' and request.method != 'DELETE') and not request.json:
             abort(400)
 
+    @token_required(Permission.ADMIN)
     def get(self, employee_id):
 
         try:
 
-            if employee_id and employee_id.isdigit(): 
+            if employee_id and employee_id.isdigit():
                 employee_schema = EmployeeSchema()
                 result = EmployeeModel.query.get(employee_id)
                 employee = employee_schema.dump(result)
                 return jsonify({'employee': employee.data}), 200
 
-
             if employee_id and not employee_id.isdigit():
                 employee_schema = EmployeeSchema(many=True)
-                result = EmployeeModel.query.filter( EmployeeModel.name.ilike('%{}%'.format(employee_id)))
+                result = EmployeeModel.query.filter(
+                    EmployeeModel.name.ilike('%{}%'.format(employee_id)))
                 employee = employee_schema.dump(result)
                 return jsonify({'employee': employee.data}), 200
 
@@ -37,20 +41,20 @@ class Employee(MethodView):
         except:
             return jsonify({'error': 'Error while fetching data!'}), 404
 
-
+    @token_required(Permission.ADMIN)
     def post(self):
 
         try:
             employee_schema = EmployeeSchema()
             employee, error = employee_schema.load(request.json)
-            
+
             if error:
                 return jsonify(error), 401
 
             db.session.add(employee)
             db.session.commit()
             employee = employee_schema.dump(employee)
-    
+
             return jsonify({
                 'employee': employee.data
             }), 201
@@ -58,13 +62,15 @@ class Employee(MethodView):
         except:
             return jsonify({'error': 'bad request, review data and try again!'}), 404
 
+    @token_required(Permission.ADMIN)
     def put(self, employee_id):
 
         if employee_id:
 
             try:
                 employee_schema = EmployeeSchema()
-                employee = EmployeeModel.query.filter(EmployeeModel.id==employee_id)
+                employee = EmployeeModel.query.filter(
+                    EmployeeModel.id == employee_id)
                 employee.update(request.json)
                 db.session.commit()
                 return employee_schema.jsonify(employee.first())
@@ -74,12 +80,13 @@ class Employee(MethodView):
         else:
             return jsonify({'error': 'bad request, review data and try again!'}), 404
 
-
+    @token_required(Permission.ADMIN)
     def delete(self, employee_id):
 
         if employee_id:
             try:
-                employee = EmployeeModel.query.filter(EmployeeModel.id==employee_id).first()
+                employee = EmployeeModel.query.filter(
+                    EmployeeModel.id == employee_id).first()
                 db.session.delete(employee)
                 db.session.commit()
                 return jsonify({'OK': 'sucess'})

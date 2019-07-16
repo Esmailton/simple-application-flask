@@ -21,7 +21,7 @@ class Movement(MethodView):
         if (request.method != 'GET' and request.method != 'DELETE') and not request.json:
             abort(400)
 
-    @token_required(Permission.MEDIUM)
+    @token_required(Permission.ADMIN)
     def get(self, args):
 
         try:

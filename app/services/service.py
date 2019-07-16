@@ -3,6 +3,8 @@ from flask.views import MethodView
 from .model import ServiceModel
 from app import db
 from .serialization import ServiceSchema
+from ..authentication.utils.decorators import token_required
+from ..authentication.model import Permission
 
 
 class Service(MethodView):
@@ -11,6 +13,7 @@ class Service(MethodView):
         if (request.method != 'GET' and request.method != 'DELETE') and not request.json:
             abort(400)
 
+    @token_required(Permission.ADMIN)
     def get(self, service_id):
 
         try:
@@ -41,6 +44,7 @@ class Service(MethodView):
                 'error': 'try again bad, request!'
             }), 401
 
+    @token_required(Permission.ADMIN)
     def post(self):
 
         if request.json:
@@ -72,6 +76,7 @@ class Service(MethodView):
                     'error': 'try again bad, request!'
                 }), 401
 
+    @token_required(Permission.ADMIN)
     def put(self, service_id):
 
         if request.json and service_id:
@@ -93,6 +98,7 @@ class Service(MethodView):
             'error': 'try again bad, request!'
         }), 401
 
+    @token_required(Permission.ADMIN)
     def delete(self, service_id):
 
         if service_id:
