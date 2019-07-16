@@ -17,7 +17,7 @@ class Role(db.Model):
     default = db.Column(db.Boolean, default=False, index=True)
     permissions = db.Column(db.Integer)
     users = db.relationship('UserModel',
-                            backref='Role', lazy='dynamic')
+                            backref='role', lazy='dynamic')
 
     def __init__(self, **kwargs):
         super(Role, self).__init__(**kwargs)
@@ -67,7 +67,7 @@ class Role(db.Model):
 
 
 class UserModel(db.Model):
-    
+
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)

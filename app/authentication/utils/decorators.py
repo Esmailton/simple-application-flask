@@ -11,7 +11,7 @@ def token_required(permission):
             auth_headers = request.headers.get('Authorization', '').split()
 
             if len(auth_headers) != 2:
-                return jsonify({'token_missing'}), 401
+                return jsonify({'Token': 'token_missing'}), 401
 
             try:
                 token = auth_headers[1]
@@ -20,13 +20,13 @@ def token_required(permission):
                     UserModel.id == data['user_id'], UserModel.active == True).first()
 
                 if not user.can(permission):
-                    return jsonify({'permission_denied_msg}'), 403
+                    return jsonify({'Permisson': 'permission_denied_msg'}), 403
 
                 return f(*args, **kwargs)
             except jwt.ExpiredSignatureError:
-                return jsonify({'expired_msg'}), 401
+                return jsonify({'Token': 'token_expired'}), 401
             except (jwt.InvalidTokenError, Exception) as e:
-                return jsonify({'invalid_msg'}, msg={"token": data}), 401
+                return jsonify({'Invalid': 'invalid_token'}, msg={"token": data}), 401
 
         return _verify
     return decorador

@@ -11,6 +11,8 @@ from sqlalchemy.sql import or_
 from sqlalchemy import Date, cast
 from .serialization import MovementSchema, MovementDescriptionSchema, MovementEmployeeSchema, MovementValueSchema
 from datetime import datetime
+from ..authentication.utils.decorators import token_required
+from ..authentication.model import Permission
 
 
 class Movement(MethodView):
@@ -19,10 +21,10 @@ class Movement(MethodView):
         if (request.method != 'GET' and request.method != 'DELETE') and not request.json:
             abort(400)
 
+    @token_required(Permission.MEDIUM)
     def get(self, args):
 
         try:
-
             if args and args.isdigit():
 
                 movement = MovementModel.query.get(args)

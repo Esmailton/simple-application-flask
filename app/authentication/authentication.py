@@ -53,7 +53,7 @@ class User(MethodView):
                     else:
                         return jsonify({'Incorect': 'user_or_password_incorrect'}), 403
 
-           # Casatro
+                # Casatro
                 if operation_type == 'sign_up':
                     user_schema = UserSchema()
                     user, error = user_schema.load(request.json)
