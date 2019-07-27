@@ -33,7 +33,6 @@ class User(MethodView):
                             'user_name'), UserModel.active == True).first()
 
                         if user and user.verify_password(auth_json.get('password')):
-
                             payload = {
                                 'user_id': user.id,
                                 'user_name': user.user_name,
