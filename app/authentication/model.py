@@ -1,6 +1,8 @@
 from app import db
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
+from ..employee.model import EmployeeModel
+
 
 
 class Permission:
@@ -77,11 +79,13 @@ class UserModel(db.Model):
     avatar = db.Column(db.String(200))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     create_at = db.Column(db.DateTime, default=datetime.utcnow)
-
+    employee_id = db.Column(db.Integer, db.ForeignKey('employee.id'))
+    employee = db.relationship(EmployeeModel)
+    
     @property
     def password(self):
         raise AttributeError('Password is not a readable attribute')
-
+    
     @password.setter
     def password(self, password):
         self.password_hash = generate_password_hash(password)

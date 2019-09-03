@@ -18,6 +18,7 @@ psycopg2 = "*"
 psycopg = "*"
 psycopg2-binary = "*"
 pyjwt = "==1.7.1"
+flask-cors = "*"
 
 [requires]
 python_version = "3.7"

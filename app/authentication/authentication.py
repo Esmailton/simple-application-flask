@@ -5,6 +5,8 @@ from app import db
 import jwt
 from .serialization import UserSchema
 import datetime
+from .utils.decorators import token_required
+from .model import Permission
 
 
 class User(MethodView):
@@ -13,8 +15,28 @@ class User(MethodView):
         if (request.method != 'GET' and request.method != 'DELETE') and not request.json:
             abort(400)
 
-    def get(self, args):
-        ...
+    @token_required(Permission.LOW)
+    def get(self):
+        auth_headers = request.headers.get('Authorization', '').split()
+
+        print(auth_headers)
+
+        if len(auth_headers) != 2:
+            return jsonify({'Token': 'token_missing'}), 401
+
+        try:
+            token = auth_headers[1]
+            data = jwt.decode(token, current_app.config['SECRET_KEY'])
+
+            return jsonify({
+                'user_name': data['user_name']
+            })
+
+            return jsonify({'Permisson': 'permission_denied_msg'}), 403
+        except jwt.ExpiredSignatureError:
+            return jsonify({'Token': 'token_expired'}), 401
+        except (jwt.InvalidTokenError, Exception) as e:
+            return jsonify({'Invalid': 'invalid_token'}, msg={"token": data}), 401
 
     def post(self):
 
@@ -28,10 +50,14 @@ class User(MethodView):
                 if operation_type == 'sign_in':
                     auth_json = request.json
                     if auth_json:
-
+                            
                         user = UserModel.query.filter(UserModel.user_name == auth_json.get(
-                            'user_name'), UserModel.active == True).first()
-
+                            'user_name'), UserModel.active == True)
+                        
+                        user_schema = UserSchema(many=True)
+                        result = user_schema.dump(user)
+                        
+                        user = user.first()
                         if user and user.verify_password(auth_json.get('password')):
                             payload = {
                                 'user_id': user.id,
@@ -44,13 +70,20 @@ class User(MethodView):
                             token = jwt.encode(
                                 payload, current_app.config['SECRET_KEY'], current_app.config['JWT_ALGORITHM'])
 
-                            return jsonify({'token': token.decode('UTF-8')})
 
-                        else:
-                            return jsonify({'Incorect': 'user_or_password_incorrect'}), 403
+                        return jsonify(
+                            {
+                                'token': token.decode('UTF-8'),
+                                'user': {
+                                    'user': result.data
+                                }
+                            })
+
+                        # else:
+                        #     return jsonify({'Incorect': 'user_or_password_incorrect'}), 401
 
                     else:
-                        return jsonify({'Incorect': 'user_or_password_incorrect'}), 403
+                        return jsonify({'Incorect': 'user_or_password_incorrect'}), 401
 
                 # Casatro
                 if operation_type == 'sign_up':
