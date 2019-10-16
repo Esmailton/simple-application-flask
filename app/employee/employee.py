@@ -1,8 +1,11 @@
+import datetime
 from flask import request, abort, request, jsonify
 from flask.views import MethodView
 from .model import EmployeeModel
+from ..address.model import AddressModel
 from app import db
 from .serialization import EmployeeSchema
+from ..address.serialization import AddressSchema
 from ..authentication.utils.decorators import token_required
 from ..authentication.model import Permission
 
@@ -13,7 +16,7 @@ class Employee(MethodView):
         if (request.method != 'GET' and request.method != 'DELETE') and not request.json:
             abort(400)
 
-    @token_required(Permission.ADMIN)
+    @token_required(Permission.LOW)
     def get(self, employee_id):
 
         try:
@@ -41,28 +44,68 @@ class Employee(MethodView):
         except:
             return jsonify({'error': 'Error while fetching data!'}), 404
 
-    @token_required(Permission.ADMIN)
+    @token_required(Permission.LOW)
     def post(self):
+        
+        if request:
+            
+            payload = request.json
+            if payload:
+                try:
+                    employee_schema = EmployeeSchema()
 
-        try:
-            employee_schema = EmployeeSchema()
-            employee, error = employee_schema.load(request.json)
+                    payload_employee = {
+                        'name': payload.get('name'),
+                        'cpf': payload.get('cpf'),
+                        'birth_date': payload.get('birth_date')
+                    }
+                   
+                    employee, error = employee_schema.load(payload_employee)
 
-            if error:
-                return jsonify(error), 401
+                    if error:
+                        return jsonify(error)
+                    
+                    db.session.add(employee)
+                    db.session.flush()
+                        
+                    if employee.id:
+                                                
+                        address_schema = AddressSchema()
+                        address_payload = {
+                            'address': payload.get('address'),
+                            'neighborhood': payload.get('neighborhood'),
+                            'number': payload.get('number'),
+                            'cep': payload.get('cep'),
+                            'uf': payload.get('uf'),
+                            'city': payload.get('city'),  
+                            'employee_id': employee.id            
+                        }
+                        
+                        address, error = address_schema.load(address_payload)
+                            
+                        if error:
+                            return jsonify(error), 400
 
-            db.session.add(employee)
-            db.session.commit()
-            employee = employee_schema.dump(employee)
+                        db.session.add(address)
+                        db.session.flush()
+                        
+                    employee = employee_schema.dump(employee)
+                    
+                    db.session.commit()
+                    return jsonify({
+                        'employee':' employee.data'
+                    }), 201
 
-            return jsonify({
-                'employee': employee.data
-            }), 201
+                except Exception as e:
+                    return jsonify({'error': '{} bad request, review data and try again!'.format(e)})
+                
+            else:
+               return jsonify({'error': 'bad request, review data and try again!'}), 404
 
-        except:
+        else:
             return jsonify({'error': 'bad request, review data and try again!'}), 404
 
-    @token_required(Permission.ADMIN)
+    @token_required(Permission.LOW)
     def put(self, employee_id):
 
         if employee_id:
