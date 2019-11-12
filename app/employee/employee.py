@@ -6,6 +6,7 @@ from ..address.model import AddressModel
 from app import db
 from .serialization import EmployeeSchema
 from ..address.serialization import AddressSchema
+from ..contact.serialization import ContactSchema
 from ..authentication.utils.decorators import token_required
 from ..authentication.model import Permission
 
@@ -89,6 +90,17 @@ class Employee(MethodView):
                         db.session.add(address)
                         db.session.flush()
                         
+                        contact_schema = ContactSchema()
+                        contact_payload = {
+                            'contact': payload.get('contact'),
+                            'employee_id': employee.id
+                        }
+                        
+                        contact, error = contact_schema.load(contact_payload)
+                        
+                        db.session.add(contact), 400
+                        db.session.flush()
+
                     employee = employee_schema.dump(employee)
                     
                     db.session.commit()

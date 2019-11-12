@@ -1,6 +1,6 @@
 from app import db
 from datetime import datetime
-from ..employee.model import EmployeeModel
+
 
 class ContactModel(db.Model):
 
@@ -8,5 +8,5 @@ class ContactModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     contact = db.Column(db.String(255))
-    employee = db.relationship("EmployeeModel")
+    employee_id = db.Column(db.Integer, db.ForeignKey('employee.id'))
     create_at = db.Column(db.DateTime, default=datetime.utcnow)
