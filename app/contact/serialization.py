@@ -1,6 +1,6 @@
 from app import ma
 from .model import ContactModel
-from ..employee.serialization import EmployeeSchema
+# from ..employee.serialization import EmployeeSchema
 from marshmallow import fields, validates, ValidationError
 
 

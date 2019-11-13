@@ -40,7 +40,7 @@ class Employee(MethodView):
                 employee_schema = EmployeeSchema(many=True)
                 result = EmployeeModel.query.all()
                 employees = employee_schema.dump(result)
-                return jsonify({'user': employees.data}), 200
+                return jsonify({'employees': employees.data}), 200
 
         except:
             return jsonify({'error': 'Error while fetching data!'}), 404
