@@ -11,6 +11,7 @@ from ..authentication.utils.decorators import token_required
 from ..authentication.model import Permission
 
 
+#Essa é a classe que manipula os funcionarios!!
 class Employee(MethodView):
 
     def __init__(self):
