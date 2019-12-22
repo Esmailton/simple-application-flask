@@ -12,6 +12,8 @@ class EmployeeModel(db.Model):
     name = db.Column(db.String(255))
     cpf = db.Column(db.String(255))
     birth_date = db.Column(db.DateTime)
+    employee_function = db.Column(db.String(255))
     address = db.relationship("AddressModel")
     contact = db.relationship("ContactModel")
     create_at = db.Column(db.DateTime, default=datetime.utcnow)
+    

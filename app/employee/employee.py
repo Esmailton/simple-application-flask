@@ -16,8 +16,8 @@ class Employee(MethodView):
     def __init__(self):
         if (request.method != 'GET' and request.method != 'DELETE') and not request.json:
             abort(400)
+    
 
-    @token_required(Permission.LOW)
     def get(self, employee_id):
 
         try:
@@ -105,7 +105,7 @@ class Employee(MethodView):
                     
                     db.session.commit()
                     return jsonify({
-                        'employee':' employee.data'
+                        'Reponse': 'success'
                     }), 201
 
                 except Exception as e:
